@@ -10,7 +10,8 @@
     "prebuild": "mkdirp build",
     "test": "npm run lint && npm run -s test:karma && node ./tools/test.cli.js",
     "test:karma": "karma start test/karma.conf.js --single-run",
-    "lint": "eslint ./src/ || true && node ./tools/lint.cli.js"
+    "lint": "eslint ./src/ || true && node ./tools/lint.cli.js",
+    "deploy": "git subtree push --prefix build origin gh-pages"
   },
   "keywords": [
     "preact",
