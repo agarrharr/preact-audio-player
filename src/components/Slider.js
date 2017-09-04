@@ -10,35 +10,33 @@ const getMinutesAndSeconds = time => {
 
 class Slider extends Component {
   state = {
-    isVolumeChanging: false,
+    leftEdge: 0,
+    sliderWidth: 0,
+    isDragging: false,
   };
 
   handleMouseMove = (e) => {
-    if (this.state.isVolumeChanging) {
-      const relativePosition = (e.x - this.state.clientX) / this.state.clientWidth;
-      const volume = relativePosition < 0
+    if (this.state.isDragging) {
+      const relativePosition = (e.x - this.state.leftEdge) / this.state.sliderWidth;
+      const value = relativePosition < 0
           ? 0
           : relativePosition > 1
             ? 1
             : relativePosition;
-      this.setState({
-        isMuted: !volume,
-        volume,
-      });
-      this.props.onChange(this.state.volume);
+      this.props.onChange(value);
     }
   };
 
   handleMouseUp = () => {
-    this.setState({isVolumeChanging: false});
+    this.setState({isDragging: false});
   };
 
   handleVolumeMouseDown = (e) => {
     e.preventDefault();
     this.setState({
-      isVolumeChanging: true,
-      clientX: e.x - e.offsetX,
-      clientWidth: e.target.clientWidth,
+      isDragging: true,
+      leftEdge: e.x - e.offsetX,
+      sliderWidth: e.target.clientWidth,
     });
     this.handleMouseMove(e);
   };

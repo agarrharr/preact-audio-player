@@ -3,6 +3,7 @@ import leftPad from 'left-pad';
 import Slider from './Slider';
 
 const VOLUME_WIDTH = 100;
+const SLIDER_WIDTH = 300;
 const BLUE = '#3FB3D2';
 const BLUE_DARK = '#1A83A1';
 const BLUE_2 = '#00A0AD';
@@ -59,12 +60,18 @@ class Widget extends Component {
     }
   };
 
-  handleVolumeChange = (volume) => {
+  handleVolumeChange = volume => {
     this.setState({
       volume,
       isMuted: volume === 0,
     });
     this.audio.volume = volume;
+  };
+
+  handleTimeChange = currentTime => {
+    this.setState({
+      currentTime,
+    });
   };
 
   handleMuteClick = () => {
@@ -98,6 +105,7 @@ class Widget extends Component {
         border: `5px solid ${BLUE_DARK}`,
       },
       PreactAudioPlayer__Time: {
+        display: 'flex',
         color: WHITE,
       },
       PreactAudioPlayer__Volume: {
@@ -119,7 +127,9 @@ class Widget extends Component {
           {isPlaying ? <PauseIcon /> : <PlayIcon />}
         </button>
         <div style={styles.PreactAudioPlayer__Time}>
-          {getMinutesAndSeconds(currentTime)}/{getMinutesAndSeconds(duration)}
+          <div>{getMinutesAndSeconds(currentTime)}</div>
+          <Slider value={(currentTime / duration) * SLIDER_WIDTH} width={SLIDER_WIDTH} onChange={this.handleTimeChange} />
+          <div>{getMinutesAndSeconds(duration)}</div>
         </div>
         <div style={styles.PreactAudioPlayer__Volume} >
           <div style={styles.PreactAudioPlayer__Mute} onClick={this.handleMuteClick}>
