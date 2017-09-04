@@ -1,5 +1,6 @@
 import { h, Component } from 'preact';
 import leftPad from 'left-pad';
+import Slider from './Slider';
 
 const VOLUME_WIDTH = 100;
 const BLUE = '#3FB3D2';
@@ -21,7 +22,7 @@ const PauseIcon = () =>
     <path d="M0,0 L0,20 L5,20 L5,0 L0,0 M10,0 L10,20 L15,20 L15,0, L10,0" fill="white" />
   </svg>
 
-export default class Widget extends Component {
+class Widget extends Component {
   state = {
     isMuted: false,
     isPlaying: false,
@@ -35,12 +36,7 @@ export default class Widget extends Component {
   };
 
   componentDidMount() {
-    document.addEventListener('mousemove', this.handleMouseMove.bind(this));
-    document.addEventListener('mouseup', this.handleMouseUp.bind(this));
     this.audio = document.getElementById('PreactAudioPlayer');
-
-    // this.interval = setInterval(() => this.setState({ currentTime: this.audio.currentTime }), 1000);
-    // this.setState({ duration: this.audio.duration });
   }
 
   componentWillUnmount() {
@@ -64,7 +60,10 @@ export default class Widget extends Component {
   };
 
   handleVolumeChange = (volume) => {
-    this.setState({volume});
+    this.setState({
+      volume,
+      isMuted: volume === 0,
+    });
     this.audio.volume = volume;
   };
 
@@ -74,39 +73,6 @@ export default class Widget extends Component {
       volume: this.state.volume === 0 ? 0.5 : this.state.volume,
     });
     this.audio.volume = this.state.isMuted ? 0 : this.state.volume;
-  };
-
-  handleMouseMove = (e) => {
-    if (this.state.isVolumeChanging) {
-      console.log(this.state.clientWidth);
-      const relativePosition = (e.x - this.state.clientX) / this.state.clientWidth;
-      const volume = relativePosition < 0
-          ? 0
-          : relativePosition > 1
-            ? 1
-            : relativePosition;
-      this.setState({
-        isMuted: !volume,
-        volume,
-      });
-      this.audio.volume = this.state.volume;
-    }
-  };
-
-  handleVolumeMouseMove = (e) => {
-  };
-
-  handleVolumeMouseDown = (e) => {
-    e.preventDefault();
-    this.setState({
-      isVolumeChanging: true,
-      clientX: e.x - e.offsetX,
-      clientWidth: e.target.clientWidth,
-    });
-  };
-
-  handleMouseUp = () => {
-    this.setState({isVolumeChanging: false});
   };
 
   render() {
@@ -141,31 +107,6 @@ export default class Widget extends Component {
         color: WHITE,
         marginRight: 20,
       },
-      PreactAudioPlayer__VolumeSlider: {
-        position: 'relative',
-        height: 20,
-        width: VOLUME_WIDTH,
-        marginRight: 20,
-        backgroundColor: WHITE,
-        borderRadius: 15,
-      },
-      PreactAudioPlayer__VolumeSliderHandle: {
-        position: 'relative',
-        height: 20,
-        width: 20,
-        top: -20,
-        left: isMuted ? 0 : (volume * (VOLUME_WIDTH - 20)),
-        backgroundColor: BLUE,
-        borderRadius: '50%',
-        pointerEvents: 'none',
-      },
-      PreactAudioPlayer__VolumeSliderFill: {
-        height: 20,
-        width: isMuted ? 0 : (volume * (VOLUME_WIDTH - 20)) + 20,
-        backgroundColor: BLUE_2,
-        borderRadius: 15,
-        pointerEvents: 'none',
-      },
     };
 
 
@@ -184,12 +125,11 @@ export default class Widget extends Component {
           <div style={styles.PreactAudioPlayer__Mute} onClick={this.handleMuteClick}>
             {isMuted ? 'Unmute' : 'Mute'}
           </div>
-          <div style={styles.PreactAudioPlayer__VolumeSlider} onMouseMove={this.handleVolumeMouseMove} onMouseDown={this.handleVolumeMouseDown}>
-            <div style={styles.PreactAudioPlayer__VolumeSliderFill}></div>
-            <div style={styles.PreactAudioPlayer__VolumeSliderHandle}></div>
-          </div>
+          <Slider value={isMuted ? 0 : (volume * (VOLUME_WIDTH - 20))} width={VOLUME_WIDTH} onChange={this.handleVolumeChange} />
         </div>
       </div>
     );
   }
 }
+
+export default Widget;
