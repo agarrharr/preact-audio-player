@@ -31,7 +31,7 @@ class Slider extends Component {
     this.setState({isDragging: false});
   };
 
-  handleVolumeMouseDown = (e) => {
+  handleMouseDown = (e) => {
     e.preventDefault();
     this.setState({
       isDragging: true,
@@ -50,27 +50,28 @@ class Slider extends Component {
     const { value, width, onChange } = this.props;
 
     const styles = {
-      PreactAudioPlayer__VolumeSlider: {
+      PreactAudioPlayer__Slider: {
         position: 'relative',
         height: 20,
         width: width,
         marginRight: 20,
         backgroundColor: WHITE,
         borderRadius: 15,
+        cursor: 'pointer',
       },
-      PreactAudioPlayer__VolumeSliderHandle: {
+      PreactAudioPlayer__SliderHandle: {
         position: 'relative',
         height: 20,
         width: 20,
         top: -20,
-        left: value,
+        left: (value * width) - (value * 20),
         backgroundColor: BLUE,
         borderRadius: '50%',
         pointerEvents: 'none',
       },
-      PreactAudioPlayer__VolumeSliderFill: {
+      PreactAudioPlayer__SliderFill: {
         height: 20,
-        width: value + 20,
+        width: (value * width) - (value * 20) + 20,
         backgroundColor: BLUE_2,
         borderRadius: 15,
         pointerEvents: 'none',
@@ -78,9 +79,9 @@ class Slider extends Component {
     };
 
     return (
-      <div style={styles.PreactAudioPlayer__VolumeSlider} onMouseDown={this.handleVolumeMouseDown}>
-        <div style={styles.PreactAudioPlayer__VolumeSliderFill}></div>
-        <div style={styles.PreactAudioPlayer__VolumeSliderHandle}></div>
+      <div style={styles.PreactAudioPlayer__Slider} onMouseDown={this.handleMouseDown}>
+        <div style={styles.PreactAudioPlayer__SliderFill}></div>
+        <div style={styles.PreactAudioPlayer__SliderHandle}></div>
       </div>
     );
   }
