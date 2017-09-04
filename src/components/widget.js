@@ -143,6 +143,7 @@ class Widget extends Component {
       },
       PreactAudioPlayer__Rate: {
         color: WHITE,
+        cursor: 'pointer',
       },
       PreactAudioPlayer__Volume: {
         display: 'flex',
