@@ -8,7 +8,26 @@ const styles = {
     height: 20,
     width: VOLUME_WIDTH,
   },
+  PreactAudioPlayer__Play: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'blue',
+    width: 50,
+    height: 50,
+    borderRadius: '50%',
+  },
 };
+
+const PlayIcon = () =>
+  <svg width="20" height="20">
+    <polygon points="0,0 0,20 20,10" fill="white" />
+  </svg>
+
+const PauseIcon = () =>
+  <svg width="20" height="20">
+    <path d="M0,0 L0,20 L5,20 L5,0 L0,0 M10,0 L10,20 L15,20 L15,0, L10,0" fill="white" />
+  </svg>
 
 export default class Widget extends Component {
   state = {
@@ -95,8 +114,8 @@ export default class Widget extends Component {
           <source src={url} type="audio/mp3" />
         </audio>
         {url}
-        <div class="PreactAudioPlayer__Play" onClick={this.handlePlayClick}>
-	  {isPlaying ? 'Pause' : 'Play'}
+        <div style={styles.PreactAudioPlayer__Play} onClick={this.handlePlayClick}>
+          {isPlaying ? <PauseIcon /> : <PlayIcon />}
         </div>
         <div class="PreactAudioPlayer__Volume">
 	  {isMuted ? 'Muted' : volume}
