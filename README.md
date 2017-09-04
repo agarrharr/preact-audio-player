@@ -1,10 +1,11 @@
-# Preact Habitat Widgets
+# Preact Audio Player
 
-> Sample repo to build small pluggable component widgets
-
-Please check the [demo here](http://youtube-habitat.netlify.com/)
-
+> An audio player built with Preact Habitat
 
 ## License
 
 MIT
+
+### Icons
+
+- [Volume](https://thenounproject.com/term/volume/1050668) by Chinnaking from the Noun Project

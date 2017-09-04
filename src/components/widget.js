@@ -19,6 +19,17 @@ const getMinutesAndSeconds = time => {
   return `${leftPad(Math.floor(time / 60), 2, '0')}:${leftPad(time % 60, 2, '0')}`
 };
 
+const MuteIcon = () =>
+  <svg width="20" height="20" viewBox="0 0 100 100">
+    <path d="M10.148,33.29v33.42h23.314l21.111,16.446V16.844L33.463,33.29H10.148z M74.477,50c0-8.232-5.002-15.315-12.125-18.379   v36.758C69.475,65.315,74.477,58.232,74.477,50z M62.352,15.52v7.226c11.826,3.423,20.5,14.341,20.5,27.255   s-8.674,23.832-20.5,27.255v7.226c15.727-3.591,27.5-17.682,27.5-34.48S78.078,19.11,62.352,15.52z" fill={WHITE} />
+  </svg>
+
+const UnmuteIcon = () =>
+  <svg width="20" height="20" viewBox="0 0 100 100">
+    <path d="M10.148,33.29v33.42h23.314l21.111,16.446V16.844L33.463,33.29H10.148z" fill={WHITE} />
+  </svg>
+
+
 const PlayIcon = () =>
   <svg width="40" height="40" viewBox="-5 0 25 20">
     <polygon points="0,0 0,20 20,10" fill="white" />
@@ -136,9 +147,11 @@ class Widget extends Component {
         display: 'flex',
       },
       PreactAudioPlayer__Mute: {
-        display: 'none',
         color: WHITE,
         marginRight: 20,
+        border: 'none',
+        background: 'none',
+        cursor: 'pointer',
       },
     };
 
@@ -160,9 +173,9 @@ class Widget extends Component {
           {rate}x
         </div>
         <div style={styles.PreactAudioPlayer__Volume}>
-          <div style={styles.PreactAudioPlayer__Mute} onClick={this.handleMuteClick}>
-            {isMuted ? 'Unmute' : 'Mute'}
-          </div>
+          <button type="button" title="Mute Toggle" aria-label="Mute Toggle" style={styles.PreactAudioPlayer__Mute} onClick={this.handleMuteClick}>
+            {isMuted ? <UnmuteIcon /> : <MuteIcon />}
+          </button>
           <Slider value={isMuted ? 0 : volume} width={VOLUME_WIDTH} onChange={this.handleVolumeChange} />
         </div>
       </div>
