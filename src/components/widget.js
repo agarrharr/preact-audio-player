@@ -43,23 +43,22 @@ export default class Widget extends Component {
   componentDidMount() {
     document.addEventListener('mousemove', this.handleMouseMove.bind(this));
     document.addEventListener('mouseup', this.handleMouseUp.bind(this));
+    this.audio = document.getElementById('PreactAudioPlayer');
   }
 
   handlePlayClick = () => {
     this.setState({isPlaying: !this.state.isPlaying});
-    const activeSong = document.getElementById('song');
 
     if (this.state.isPlaying) {
-      activeSong.play();
+      this.audio.play();
     } else {
-      activeSong.pause();
+      this.audio.pause();
     }
   };
 
   handleVolumeChange = (volume) => {
     this.setState({volume});
-    const activeSong = document.getElementById('song');
-    activeSong.volume = volume;
+    this.audio.volume = volume;
   };
 
   handleMuteClick = () => {
@@ -67,8 +66,7 @@ export default class Widget extends Component {
       isMuted: !this.state.isMuted,
       volume: this.state.volume === 0 ? 0.5 : this.state.volume,
     });
-    const activeSong = document.getElementById('song');
-    activeSong.volume = this.state.isMuted ? 0 : this.state.volume;
+    this.audio.volume = this.state.isMuted ? 0 : this.state.volume;
   };
 
   handleMouseMove = (e) => {
@@ -83,8 +81,7 @@ export default class Widget extends Component {
         isMuted: !volume,
         volume,
       });
-      const activeSong = document.getElementById('song');
-      activeSong.volume = this.state.volume;
+      this.audio.volume = this.state.volume;
     }
   };
 
@@ -109,11 +106,9 @@ export default class Widget extends Component {
 
     return (
       <div>
-<p>hello</p>
-        <audio id="song" width="300" height="32" controls="controls">
+        <audio id="PreactAudioPlayer" width="300" height="32" controls="controls">
           <source src={url} type="audio/mp3" />
         </audio>
-        {url}
         <div style={styles.PreactAudioPlayer__Play} onClick={this.handlePlayClick}>
           {isPlaying ? <PauseIcon /> : <PlayIcon />}
         </div>
