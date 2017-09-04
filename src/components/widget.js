@@ -1,6 +1,8 @@
 import { h, Component } from 'preact';
 
 const VOLUME_WIDTH = 20;
+const BLUE = '#3FB3D2';
+const BLUE_DARK = '#1A83A1';
 
 const styles = {
   PreactAudioPlayer__VolumeSlider: {
@@ -12,20 +14,21 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'blue',
-    width: 50,
-    height: 50,
+    backgroundColor: BLUE,
+    width: 100,
+    height: 100,
     borderRadius: '50%',
+    border: `5px solid ${BLUE_DARK}`,
   },
 };
 
 const PlayIcon = () =>
-  <svg width="20" height="20">
+  <svg width="40" height="40" viewBox="-5 0 25 20">
     <polygon points="0,0 0,20 20,10" fill="white" />
   </svg>
 
 const PauseIcon = () =>
-  <svg width="20" height="20">
+  <svg width="40" height="40" viewBox="-5 0 25 20">
     <path d="M0,0 L0,20 L5,20 L5,0 L0,0 M10,0 L10,20 L15,20 L15,0, L10,0" fill="white" />
   </svg>
 
@@ -109,9 +112,9 @@ export default class Widget extends Component {
         <audio id="PreactAudioPlayer" width="300" height="32" controls="controls">
           <source src={url} type="audio/mp3" />
         </audio>
-        <div style={styles.PreactAudioPlayer__Play} onClick={this.handlePlayClick}>
+        <button type="button" title="Play/Pause" aria-label="Play/Pause" style={styles.PreactAudioPlayer__Play} onClick={this.handlePlayClick}>
           {isPlaying ? <PauseIcon /> : <PlayIcon />}
-        </div>
+        </button>
         <div class="PreactAudioPlayer__Volume">
 	  {isMuted ? 'Muted' : volume}
           <div class="PreactAudioPlayer__Mute" onClick={this.handleMuteClick}>
