@@ -2,6 +2,8 @@
 
 > An audio player built with Preact Habitat
 
+![Screenshot](screenshot.png)
+
 ## License
 
 MIT

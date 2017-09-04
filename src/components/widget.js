@@ -116,8 +116,9 @@ class Widget extends Component {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: BLUE_DARK,
         height: 50,
+        margin: '40px 0',
+        backgroundColor: BLUE_DARK,
       },
       PreactAudioPlayer__Play: {
         display: 'flex',
