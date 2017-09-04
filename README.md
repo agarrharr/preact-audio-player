@@ -2,6 +2,8 @@
 
 > An audio player built with Preact Habitat
 
+<a href="http://app.codesponsor.io/link/3owRGftAkghuGdjHaa955zEJ/agarrharr/preact-audio-player" rel="nofollow"><img src="http://app.codesponsor.io/embed/3owRGftAkghuGdjHaa955zEJ/agarrharr/preact-audio-player.svg" style="width: 888px; height: 68px;" alt="Sponsor" /></a>
+
 ![Screenshot](screenshot.png)
 
 ## License
