@@ -166,7 +166,7 @@ class Widget extends Component {
         </button>
         <div style={styles.PreactAudioPlayer__Time}>
           <div style={styles.PreactAudioPlayer__TimeLeft}>{getMinutesAndSeconds(currentTime)}</div>
-          <Slider value={currentTime / duration} width={SLIDER_WIDTH} onChange={this.handleTimeChange} />
+          <Slider value={currentTime / duration || 0} width={SLIDER_WIDTH} onChange={this.handleTimeChange} />
           <div style={styles.PreactAudioPlayer__TimeRight}>{getMinutesAndSeconds(duration)}</div>
         </div>
         <div style={styles.PreactAudioPlayer__Rate} onClick={this.handlePlaybackRate}>
