@@ -40,6 +40,13 @@ const PauseIcon = () =>
     <path d="M0,0 L0,20 L5,20 L5,0 L0,0 M10,0 L10,20 L15,20 L15,0, L10,0" fill="white" />
   </svg>
 
+const MARGIN_WIDTH = 20;
+const PLAY_BUTTON_WIDTH = 100;
+const PLAY_BUTTON_BORDER_WIDTH = 5;
+const TIME_WIDTH = 40;
+const RATE_WIDTH = 20;
+const MUTE_WIDTH = 20;
+
 class Widget extends Component {
   state = {
     isMuted: false,
@@ -48,19 +55,31 @@ class Widget extends Component {
     currentTime: null,
     duration: null,
     rate: 1,
+    window: 0,
   };
 
   static defaultProps = {
     url: null
   };
 
-  componentDidMount() {
-    this.audio = document.getElementById('PreactAudioPlayer');
-  }
+  updateDimensions = () => {
+    const componentWidth = this.component.offsetWidth;
+    const fixedWidthItems = (MARGIN_WIDTH * 8) + PLAY_BUTTON_WIDTH + PLAY_BUTTON_BORDER_WIDTH * 2 + TIME_WIDTH * 2 + RATE_WIDTH + MUTE_WIDTH;
+    this.setState({
+      timeSliderWidth: (componentWidth - fixedWidthItems) * 0.7,
+      volumeSliderWidth: (componentWidth - fixedWidthItems) * 0.3,
+    });
+  };
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+  componentDidMount = () => {
+    this.audio = document.getElementById('PreactAudioPlayer');
+    window.addEventListener("resize", this.updateDimensions);
+    this.updateDimensions();
+  };
+
+  componentWillUnmount = () => {
+    window.removeEventListener("resize", this.updateDimensions);
+  };
 
   handlePlayClick = () => {
     this.setState({isPlaying: !this.state.isPlaying});
@@ -116,20 +135,24 @@ class Widget extends Component {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        boxSizing: 'border-box',
         height: 50,
         margin: '40px 0',
         backgroundColor: BLUE_DARK,
+        fontFamily: 'sans-serif',
       },
       PreactAudioPlayer__Play: {
         display: 'flex',
+        flex: 'none',
         justifyContent: 'center',
         alignItems: 'center',
-        width: 100,
-        height: 100,
-        marginLeft: 20,
+        boxSizing: 'border-box',
+        width: PLAY_BUTTON_WIDTH,
+        height: PLAY_BUTTON_WIDTH,
+        marginLeft: MARGIN_WIDTH,
         backgroundColor: BLUE,
         borderRadius: '50%',
-        border: `5px solid ${BLUE_DARK}`,
+        border: `${PLAY_BUTTON_BORDER_WIDTH}px solid ${BLUE_DARK}`,
         cursor: 'pointer',
       },
       PreactAudioPlayer__Time: {
@@ -137,29 +160,41 @@ class Widget extends Component {
         color: WHITE,
       },
       PreactAudioPlayer__TimeLeft: {
-        marginRight: 20,
+        marginLeft: MARGIN_WIDTH,
+        width: TIME_WIDTH,
+      },
+      PreactAudioPlayer__TimeSlider: {
+        marginLeft: MARGIN_WIDTH,
       },
       PreactAudioPlayer__TimeRight: {
+        width: TIME_WIDTH,
+        marginLeft: MARGIN_WIDTH,
       },
       PreactAudioPlayer__Rate: {
+        width: RATE_WIDTH,
+        marginLeft: MARGIN_WIDTH,
         color: WHITE,
         cursor: 'pointer',
       },
       PreactAudioPlayer__Volume: {
         display: 'flex',
+        marginRight: MARGIN_WIDTH,
       },
       PreactAudioPlayer__Mute: {
-        color: WHITE,
-        marginRight: 20,
+        width: MUTE_WIDTH,
+        marginLeft: MARGIN_WIDTH,
         border: 'none',
+        color: WHITE,
         background: 'none',
         cursor: 'pointer',
       },
+      PreactAudioPlayer__VolumeSlider: {
+        marginLeft: MARGIN_WIDTH,
+      },
     };
 
-
     return (
-      <div style={styles.PreactAudioPlayer}>
+      <div style={styles.PreactAudioPlayer} ref={e => this.component = e}>
         <audio id="PreactAudioPlayer">
           <source src={url} type="audio/mp3" />
         </audio>
@@ -168,7 +203,9 @@ class Widget extends Component {
         </button>
         <div style={styles.PreactAudioPlayer__Time}>
           <div style={styles.PreactAudioPlayer__TimeLeft}>{getMinutesAndSeconds(currentTime)}</div>
-          <Slider value={currentTime / duration || 0} width={SLIDER_WIDTH} onChange={this.handleTimeChange} />
+          <div style={styles.PreactAudioPlayer__TimeSlider}>
+            <Slider value={currentTime / duration || 0} width={this.state.timeSliderWidth} onChange={this.handleTimeChange} />
+          </div>
           <div style={styles.PreactAudioPlayer__TimeRight}>{getMinutesAndSeconds(duration)}</div>
         </div>
         <div style={styles.PreactAudioPlayer__Rate} onClick={this.handlePlaybackRate}>
@@ -178,7 +215,9 @@ class Widget extends Component {
           <button type="button" title="Mute Toggle" aria-label="Mute Toggle" style={styles.PreactAudioPlayer__Mute} onClick={this.handleMuteClick}>
             {isMuted ? <UnmuteIcon /> : <MuteIcon />}
           </button>
-          <Slider value={isMuted ? 0 : volume} width={VOLUME_WIDTH} onChange={this.handleVolumeChange} />
+          <div style={styles.PreactAudioPlayer__VolumeSlider}>
+            <Slider value={isMuted ? 0 : volume} width={this.state.volumeSliderWidth} onChange={this.handleVolumeChange} />
+          </div>
         </div>
       </div>
     );

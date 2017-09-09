@@ -53,8 +53,7 @@ class Slider extends Component {
       PreactAudioPlayer__Slider: {
         position: 'relative',
         height: 20,
-        width: width,
-        marginRight: 20,
+        width,
         backgroundColor: WHITE,
         borderRadius: 15,
         cursor: 'pointer',
