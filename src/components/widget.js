@@ -65,9 +65,18 @@ class Widget extends Component {
   updateDimensions = () => {
     const componentWidth = this.component.offsetWidth;
     const fixedWidthItems = (MARGIN_WIDTH * 8) + PLAY_BUTTON_WIDTH + PLAY_BUTTON_BORDER_WIDTH * 2 + TIME_WIDTH * 2 + RATE_WIDTH + MUTE_WIDTH;
+    const remainingSpace = componentWidth - fixedWidthItems;
+    const extraSpace = remainingSpace < 100
+      ? remainingSpace < 35
+        ? TIME_WIDTH + MUTE_WIDTH + (MARGIN_WIDTH * 2)
+        : TIME_WIDTH + MARGIN_WIDTH
+      : 0;
+
     this.setState({
-      timeSliderWidth: (componentWidth - fixedWidthItems) * 0.7,
-      volumeSliderWidth: (componentWidth - fixedWidthItems) * 0.3,
+      timeSliderWidth: (remainingSpace + extraSpace) * 0.7,
+      volumeSliderWidth: (remainingSpace + extraSpace) * 0.3,
+      showRightTime: remainingSpace > 99,
+      showMute: remainingSpace > 34,
     });
   };
 
@@ -206,15 +215,19 @@ class Widget extends Component {
           <div style={styles.PreactAudioPlayer__TimeSlider}>
             <Slider value={currentTime / duration || 0} width={this.state.timeSliderWidth} onChange={this.handleTimeChange} />
           </div>
-          <div style={styles.PreactAudioPlayer__TimeRight}>{getMinutesAndSeconds(duration)}</div>
+          {this.state.showRightTime
+            ? <div style={styles.PreactAudioPlayer__TimeRight}>{getMinutesAndSeconds(duration)}</div>
+            : null}
         </div>
         <div style={styles.PreactAudioPlayer__Rate} onClick={this.handlePlaybackRate}>
           {rate}x
         </div>
         <div style={styles.PreactAudioPlayer__Volume}>
-          <button type="button" title="Mute Toggle" aria-label="Mute Toggle" style={styles.PreactAudioPlayer__Mute} onClick={this.handleMuteClick}>
-            {isMuted ? <UnmuteIcon /> : <MuteIcon />}
-          </button>
+          {this.state.showMute
+            ? <button type="button" title="Mute Toggle" aria-label="Mute Toggle" style={styles.PreactAudioPlayer__Mute} onClick={this.handleMuteClick}>
+                {isMuted ? <UnmuteIcon /> : <MuteIcon />}
+              </button>
+            : null}
           <div style={styles.PreactAudioPlayer__VolumeSlider}>
             <Slider value={isMuted ? 0 : volume} width={this.state.volumeSliderWidth} onChange={this.handleVolumeChange} />
           </div>
